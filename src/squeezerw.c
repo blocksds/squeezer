@@ -27,6 +27,9 @@ static int allowRotations = 1;
 static int verbose = 0;
 static const char *outputTextureFilename = "squeezer.png";
 static const char *outputInfoFilename = "squeezer.xml";
+static const char *outputHFilename = NULL;
+static const char *outputCFilename = NULL;
+static const char *outputBaseName = NULL;
 static const char *infoHeader = 0;
 static const char *infoFooter = 0;
 static const char *infoBody = 0;
@@ -43,6 +46,9 @@ static void usage(void) {
     "        --border <1/0/true/false/yes/no>\n"
     "        --outputTexture <output texture filename>\n"
     "        --outputInfo <output sprite info filename>\n"
+    "        --outputH <output sprite info header file>\n"
+    "        --outputC <output sprite info C file>\n"
+    "        --outputBaseName <output C base name>\n"
     "        --infoHeader <output header template>\n"
     "        --infoBody <output body template>\n"
     "        --infoSplit <output body split template>\n"
@@ -98,7 +104,14 @@ static int squeezerw(void) {
     squeezerDestroy(ctx);
     return -1;
   }
-  if (infoBody) {
+
+  if (outputBaseName) {
+    if (0 != sqeezerOutputC(ctx, outputBaseName, outputCFilename, outputHFilename)) {
+      fprintf(stderr, "%s: squeezerOutputC failed\n", __FUNCTION__);
+      squeezerDestroy(ctx);
+      return -1;
+    }
+  } else if (infoBody) {
     if (0 != squeezerOutputCustomFormat(ctx, outputInfoFilename,
         infoHeader, infoBody, infoFooter, infoSplit)) {
       fprintf(stderr, "%s: squeezerOutputCustomFormat failed\n", __FUNCTION__);
@@ -140,6 +153,12 @@ int main(int argc, char *argv[]) {
         outputTextureFilename = argv[++i];
       } else if (0 == strcmp(param, "--outputInfo")) {
         outputInfoFilename = argv[++i];
+      } else if (0 == strcmp(param, "--outputH")) {
+        outputHFilename = argv[++i];
+      } else if (0 == strcmp(param, "--outputC")) {
+        outputCFilename = argv[++i];
+      } else if (0 == strcmp(param, "--outputBaseName")) {
+        outputBaseName = argv[++i];
       } else if (0 == strcmp(param, "--infoHeader")) {
         infoHeader = argv[++i];
       } else if (0 == strcmp(param, "--infoBody")) {
@@ -171,6 +190,9 @@ int main(int argc, char *argv[]) {
       "    --border %s\n"
       "    --outputTexture %s\n"
       "    --outputInfo %s\n"
+      "    --outputH %s\n"
+      "    --outputC %s\n"
+      "    --outputBaseName %s\n"
       "    --infoHeader %s\n"
       "    --infoBody %s\n"
       "    --infoFooter %s\n"
@@ -182,6 +204,9 @@ int main(int argc, char *argv[]) {
       border ? "true" : "false",
       outputTextureFilename,
       outputInfoFilename,
+      outputHFilename ? outputHFilename : "",
+      outputCFilename ? outputCFilename : "",
+      outputBaseName ? outputBaseName : "",
       infoHeader ? infoHeader : "",
       infoBody ? infoBody : "",
       infoFooter ? infoFooter : "",
