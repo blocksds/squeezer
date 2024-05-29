@@ -104,8 +104,38 @@ static fileItem *getFileListInDir(const char *dir, int *itemCount) {
       return 0;
     }
     imageOpsDestroy(img);
-    newItem->next = fileList;
-    fileList = newItem;
+
+    // Insert the new file into the right place of the linked list so that they
+    // are sorted alphabetically.
+
+    if (fileList == NULL) {
+      fileList = newItem;
+    } else if (strcmp(newItem->shortName, fileList->shortName) < 0) {
+      newItem->next = fileList;
+      fileList = newItem;
+    } else {
+      fileItem *last_ = fileList;
+      fileItem *this_ = fileList->next;
+
+      while (1)
+      {
+        if (this_ == NULL) {
+          last_->next = newItem;
+          break;
+        }
+
+        if (strcmp(this_->shortName, newItem->shortName) < 0) {
+          last_ = this_;
+          this_ = this_->next;
+          continue;
+        }
+
+        last_->next = newItem;
+        newItem->next = this_;
+        break;
+      }
+    }
+
     ++count;
   }
   closedir(dirp);
