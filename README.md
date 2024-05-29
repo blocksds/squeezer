@@ -14,15 +14,7 @@ Don't hesitate to make a pull request. All kinds of contribution are welcome.
 Building(Linux/OSX)
 ---------------
 ```sh
-$ cd ./src
 $ make
-```
-
-Building(Windows)
---------------
-```sh
-$ cd .\src
-$ nmake -f Makefile.mak
 ```
 
 Usage
@@ -61,7 +53,6 @@ usage: squeezerw [options] <sprite image dir>
 Example
 ------------
 ```sh
-$ cd ./src
 $ make
 
 $ ./squeezerw ../example/images --verbose --width 512 --height 256 --border 1 --outputTexture ../example/squeezer.png --outputInfo ../example/squeezer.xml
