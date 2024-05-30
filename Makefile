@@ -103,7 +103,7 @@ clean:
 	@echo "  CLEAN  "
 	$(V)$(RM) $(ELF) $(BUILDDIR)
 
-INSTALLDIR	?= /opt/blocksds/core/squeezerw/
+INSTALLDIR	?= /opt/blocksds/core/tools/squeezer/
 INSTALLDIR_ABS	:= $(abspath $(INSTALLDIR))
 
 install: all
