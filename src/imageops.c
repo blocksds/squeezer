@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: ISC
+
 /* Copyright (c) huxingyi@msn.com All rights reserved.
  *
  * Permission to use, copy, modify, and/or distribute this software for any

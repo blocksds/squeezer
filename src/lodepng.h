@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Zlib
+
 /*
 LodePNG version 20160501
 
