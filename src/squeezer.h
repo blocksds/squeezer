@@ -30,8 +30,8 @@ int squeezerDoDir(squeezer *ctx, const char *dir);
 void squeezerDestroy(squeezer *ctx);
 int squeezerOutputImage(squeezer *ctx, const char *filename);
 int squeezerOutputXml(squeezer *ctx, const char *filename);
-int sqeezerOutputC(squeezer *ctx, const char *outputBaseName,
-  const char *outputCFilename, const char *outputHFilename);
+int sqeezerOutputC(squeezer *ctx, const char *outputBaseName, const char *outputCFilename,
+  const char *outputHFilename, const char *outputNitroFilename);
 int squeezerOutputCustomFormat(squeezer *ctx, const char *filename,
   const char *header, const char *body, const char *footer, const char *split);
 

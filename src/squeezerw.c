@@ -31,6 +31,7 @@ static const char *outputTextureFilename = "squeezer.png";
 static const char *outputInfoFilename = "squeezer.xml";
 static const char *outputHFilename = NULL;
 static const char *outputCFilename = NULL;
+static const char *outputNitroFilename = NULL;
 static const char *outputBaseName = NULL;
 static const char *infoHeader = 0;
 static const char *infoFooter = 0;
@@ -50,6 +51,7 @@ static void usage(void) {
     "        --outputInfo <output sprite info filename>\n"
     "        --outputH <output sprite info header file>\n"
     "        --outputC <output sprite info C file>\n"
+    "        --outputNitro <output sprite info NitroFS file>\n"
     "        --outputBaseName <output C base name>\n"
     "        --infoHeader <output header template>\n"
     "        --infoBody <output body template>\n"
@@ -108,7 +110,8 @@ static int squeezerw(void) {
   }
 
   if (outputBaseName) {
-    if (0 != sqeezerOutputC(ctx, outputBaseName, outputCFilename, outputHFilename)) {
+    if (0 != sqeezerOutputC(ctx, outputBaseName, outputCFilename, outputHFilename,
+        outputNitroFilename)) {
       fprintf(stderr, "%s: squeezerOutputC failed\n", __FUNCTION__);
       squeezerDestroy(ctx);
       return -1;
@@ -159,6 +162,8 @@ int main(int argc, char *argv[]) {
         outputHFilename = argv[++i];
       } else if (0 == strcmp(param, "--outputC")) {
         outputCFilename = argv[++i];
+      } else if (0 == strcmp(param, "--outputNitro")) {
+        outputNitroFilename = argv[++i];
       } else if (0 == strcmp(param, "--outputBaseName")) {
         outputBaseName = argv[++i];
       } else if (0 == strcmp(param, "--infoHeader")) {
@@ -194,6 +199,7 @@ int main(int argc, char *argv[]) {
       "    --outputInfo %s\n"
       "    --outputH %s\n"
       "    --outputC %s\n"
+      "    --outputNitro %s\n"
       "    --outputBaseName %s\n"
       "    --infoHeader %s\n"
       "    --infoBody %s\n"
@@ -208,6 +214,7 @@ int main(int argc, char *argv[]) {
       outputInfoFilename,
       outputHFilename ? outputHFilename : "",
       outputCFilename ? outputCFilename : "",
+      outputNitroFilename ? outputNitroFilename : "",
       outputBaseName ? outputBaseName : "",
       infoHeader ? infoHeader : "",
       infoBody ? infoBody : "",
