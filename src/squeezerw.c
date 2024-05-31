@@ -25,7 +25,7 @@
 static const char *dir = 0;
 static int binWidth = 512;
 static int binHeight = 512;
-static int allowRotations = 1;
+static int allowRotations = 0;
 static int verbose = 0;
 static const char *outputTextureFilename = "squeezer.png";
 static const char *outputInfoFilename = "squeezer.xml";
