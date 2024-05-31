@@ -16,6 +16,7 @@
  */
 
 #include "squeezer.h"
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -23,8 +24,8 @@
 #define SQUEEZERW_VER "0.0.1 beta"
 
 static const char *dir = 0;
-static int binWidth = 512;
-static int binHeight = 512;
+static int binWidth = 0;
+static int binHeight = 0;
 static int allowRotations = 0;
 static int verbose = 0;
 static const char *outputTextureFilename = "squeezer.png";
@@ -93,16 +94,66 @@ static int squeezerw(void) {
     fprintf(stderr, "%s: squeezerCreate failed\n", __FUNCTION__);
     return -1;
   }
-  squeezerSetBinWidth(ctx, binWidth);
-  squeezerSetBinHeight(ctx, binHeight);
   squeezerSetAllowRotations(ctx, allowRotations);
   squeezerSetVerbose(ctx, verbose);
   squeezerSetHasBorder(ctx, border);
-  if (0 != squeezerDoDir(ctx, dir)) {
-    fprintf(stderr, "%s: squeezerDoDir failed\n", __FUNCTION__);
-    squeezerDestroy(ctx);
-    return -1;
+
+  if ((binWidth != 0) && (binHeight != 0)) {
+    // If the size is provided by the user, try only with that size
+    squeezerSetBinWidth(ctx, binWidth);
+    squeezerSetBinHeight(ctx, binHeight);
+
+    if (verbose)
+      printf("Trying with %dx%d\n", binWidth, binHeight);
+
+    if (0 != squeezerDoDir(ctx, dir)) {
+      fprintf(stderr, "%s: squeezerDoDir failed\n", __FUNCTION__);
+      squeezerDestroy(ctx);
+      return -1;
+    }
+  } else {
+    // If the size hasn't been specified, retry all possible sizes
+    bool retryWidth = false;
+    bool retryHeight = false;
+
+    if (binWidth == 0) {
+        binWidth = 8;
+        retryWidth = true;
+    }
+    if (binHeight == 0) {
+        binHeight = 8;
+        retryHeight = true;
+    }
+
+    while (1) {
+      squeezerSetBinWidth(ctx, binWidth);
+      squeezerSetBinHeight(ctx, binHeight);
+
+      if (verbose)
+        printf("Trying with %dx%d\n", binWidth, binHeight);
+
+      if (0 == squeezerDoDir(ctx, dir))
+        break;
+
+      if (retryWidth && retryHeight) {
+        if (binWidth < binHeight)
+          binWidth *=2;
+        else
+          binHeight *=2;
+      } else if (retryWidth) {
+        binWidth *=2;
+      } else if (retryHeight) {
+        binHeight *=2;
+      }
+
+      if (binWidth > 1024 || binHeight > 1024) {
+        fprintf(stderr, "%s: squeezerDoDir failed for all allowed sizes for the DS\n", __FUNCTION__);
+        squeezerDestroy(ctx);
+        return -1;
+      }
+    }
   }
+
   if (0 != squeezerOutputImage(ctx, outputTextureFilename)) {
     fprintf(stderr, "%s: squeezerOutputImage failed\n", __FUNCTION__);
     squeezerDestroy(ctx);
