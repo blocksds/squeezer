@@ -15,6 +15,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <ctype.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -79,6 +80,17 @@ static fileItem *getFileListInDir(const char *dir, int *itemCount) {
     if ('.' == dp->d_name[0]) {
       continue;
     }
+
+    // Discard all files that aren't png files
+    size_t len = strlen(dp->d_name);
+    if (len < 4) {
+      continue;
+    }
+    if ((tolower(dp->d_name[len - 1]) != 'g') || (tolower(dp->d_name[len - 2]) != 'n') ||
+      (tolower(dp->d_name[len - 3]) != 'p') || (tolower(dp->d_name[len - 4]) != '.')) {
+      continue;
+    }
+
     newItem = calloc(1, sizeof(fileItem));
     if (!newItem) {
       fprintf(stderr, "%s: %s\n", __FUNCTION__, "calloc failed");
