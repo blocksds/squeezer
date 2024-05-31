@@ -160,7 +160,7 @@ static int squeezerw(void) {
     return -1;
   }
 
-  if (outputBaseName) {
+  if (outputBaseName || outputNitroFilename) {
     if (0 != sqeezerOutputC(ctx, outputBaseName, outputCFilename, outputHFilename,
         outputNitroFilename)) {
       fprintf(stderr, "%s: squeezerOutputC failed\n", __FUNCTION__);
