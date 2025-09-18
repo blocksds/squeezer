@@ -249,7 +249,7 @@ static int outputInfo(squeezer *ctx, const char *outputInfoFilename) {
   return 0;
 }
 
-int sqeezerOutputC(squeezer *ctx, const char *outputBaseName, const char *outputCFilename,
+int squeezerOutputC(squeezer *ctx, const char *outputBaseName, const char *outputCFilename,
   const char *outputHFilename, const char *outputNitroFilename) {
 
   // Either the C file or NitroFS file are required. If the C file is requested,
