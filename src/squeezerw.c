@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define SQUEEZERW_VER "0.0.1 beta"
+#define SQUEEZERW_VER VERSION_STRING
 
 static const char *dir = 0;
 static int binWidth = 0;
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
     const char *param = argv[i];
     if ('-' == param[0]) {
       if (0 == strcmp(param, "--version")) {
-        printf(SQUEEZERW_VER "\n");
+        printf("squeezerw " SQUEEZERW_VER "\n");
         return 0;
       } else if (0 == strcmp(param, "--width")) {
         binWidth = atoi(argv[++i]);
