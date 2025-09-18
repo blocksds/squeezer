@@ -186,6 +186,10 @@ static int squeezerw(void) {
 }
 
 int main(int argc, char *argv[]) {
+  if ((argc == 2) && (strcmp(argv[1], "-V") == 0)) {
+    printf("squeezerw " SQUEEZERW_VER "\n");
+    return 0;
+  }
   int i;
   if (argc < 2) {
     usage();
